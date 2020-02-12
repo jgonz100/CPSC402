@@ -1,3 +1,7 @@
+# CPSC 402, Dr. Alexander Kurz
+# Jadyn Gonzalez and Michelle Kutsanov
+
+# FSM based on the matching pattern aa|aab
 with open("specification3.txt") as f:
     state = 0
     i = 1
