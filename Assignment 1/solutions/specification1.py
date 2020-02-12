@@ -3,7 +3,7 @@
 
 # FSM based on the matching pattern abab
 def run_spec1():
-    with open("specification1.txt") as f:
+    with open("texts/specification1.txt") as f:
         state = 0
         i = 1
         matches = []
