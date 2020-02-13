@@ -1,5 +1,5 @@
 # Compiler Construction Assignments
-## Assignment 1
+## Assignment 1 - Finite State String Matching
 Jadyn Gonzalez and Michelle Kutsanov
 > jgonzalez@chapman.edu kutsanov@chapman.edu
 - To run the programs, clone the repository and **cd** into the **Assignment 1** directory.
