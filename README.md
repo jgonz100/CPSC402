@@ -1,5 +1,5 @@
 # Compiler Construction Assignments
-## Assignment 1 - Finite State String Matching
+## [Assignment 1 - Finite State String Matching](https://github.com/jgonz100/CPSC402/tree/master/Assignment%201)
 Jadyn Gonzalez and Michelle Kutsanov
 > jgonzalez@chapman.edu kutsanov@chapman.edu
 - To run the programs, clone the repository and **cd** into the **Assignment 1** directory.
