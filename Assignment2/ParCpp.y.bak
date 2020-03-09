@@ -75,13 +75,14 @@ import ErrM
   'if' { PT _ (TS _ 34) }
   'int' { PT _ (TS _ 35) }
   'return' { PT _ (TS _ 36) }
-  'throw' { PT _ (TS _ 37) }
-  'true' { PT _ (TS _ 38) }
-  'void' { PT _ (TS _ 39) }
-  'while' { PT _ (TS _ 40) }
-  '{' { PT _ (TS _ 41) }
-  '||' { PT _ (TS _ 42) }
-  '}' { PT _ (TS _ 43) }
+  'string' { PT _ (TS _ 37) }
+  'throw' { PT _ (TS _ 38) }
+  'true' { PT _ (TS _ 39) }
+  'void' { PT _ (TS _ 40) }
+  'while' { PT _ (TS _ 41) }
+  '{' { PT _ (TS _ 42) }
+  '||' { PT _ (TS _ 43) }
+  '}' { PT _ (TS _ 44) }
   L_quoted { PT _ (TL $$) }
   L_integ  { PT _ (TI $$) }
   L_doubl  { PT _ (TD $$) }
@@ -127,11 +128,12 @@ Stm : Exp ';' { AbsCpp.SExp $1 }
 Exp16 :: { Exp }
 Exp16 : String { AbsCpp.ELit $1 } | '(' Exp ')' { $2 }
 Exp15 :: { Exp }
-Exp15 : Integer { AbsCpp.EInt $1 }
+Exp15 : Type { AbsCpp.EType $1 }
+      | Integer { AbsCpp.EInt $1 }
       | Double { AbsCpp.EDouble $1 }
       | 'true' { AbsCpp.ETrue }
       | 'false' { AbsCpp.EFalse }
-      | Exp15 '::' Exp16 { AbsCpp.EQCons $1 $3 }
+      | Exp15 '::' ListExp { AbsCpp.EQCons $1 $3 }
       | Exp15 '[' Integer ']' { AbsCpp.EIdx $1 $3 }
       | Id { AbsCpp.EId $1 }
       | Id '(' ListExp ')' { AbsCpp.EApp $1 $3 }
@@ -202,6 +204,7 @@ Type : 'bool' { AbsCpp.Tbool }
      | 'double' { AbsCpp.Tdouble }
      | 'int' { AbsCpp.Tint }
      | 'void' { AbsCpp.Tvoid }
+     | 'string' { AbsCpp.Tstring }
 {
 
 returnM :: a -> Err a

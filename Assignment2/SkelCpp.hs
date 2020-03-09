@@ -34,10 +34,12 @@ transStm x = case x of
 transExp :: Exp -> Result
 transExp x = case x of
   ELit string -> failure x
+  EType type_ -> failure x
   EInt integer -> failure x
   EDouble double -> failure x
   ETrue -> failure x
   EFalse -> failure x
+  ETemp exp exps id -> failure x
   EQCons exp exps -> failure x
   EIdx exp integer -> failure x
   EId id -> failure x
@@ -74,4 +76,5 @@ transType x = case x of
   Tdouble -> failure x
   Tint -> failure x
   Tvoid -> failure x
+  Tstring -> failure x
 

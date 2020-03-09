@@ -28,10 +28,12 @@ data Stm
 
 data Exp
     = ELit String
+    | EType Type
     | EInt Integer
     | EDouble Double
     | ETrue
     | EFalse
+    | ETemp Exp [Exp] Id
     | EQCons Exp [Exp]
     | EIdx Exp Integer
     | EId Id
@@ -64,6 +66,6 @@ data Exp
     | EExp Exp
   deriving (Eq, Ord, Show, Read)
 
-data Type = Tbool | Tdouble | Tint | Tvoid
+data Type = Tbool | Tdouble | Tint | Tvoid | Tstring
   deriving (Eq, Ord, Show, Read)
 

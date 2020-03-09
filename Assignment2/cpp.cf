@@ -17,10 +17,12 @@ SBlock. Stm ::= "{" [Stm] "}" ;
 SIfElse. Stm ::= "if" "(" Exp ")" Stm "else" Stm ;
 
 ELit. Exp16 ::= String ;
+EType. Exp15 ::= Type ;
 EInt. Exp15 ::= Integer ;
 EDouble. Exp15 ::= Double ;
 ETrue. Exp15 ::= "true" ;
 EFalse. Exp15 ::= "false" ;
+ETemp. Exp15 ::= Exp15 "::" [Exp] Id ;
 EQCons. Exp15 ::= Exp15 "::" [Exp] ;
 EIdx. Exp15 ::= Exp15 "[" Integer "]" ;
 EId. Exp15 ::= Id ;
@@ -60,5 +62,6 @@ Tbool. Type ::= "bool" ;
 Tdouble. Type ::= "double" ;
 Tint. Type ::= "int" ;
 Tvoid. Type ::= "void" ;
+Tstring. Type ::= "string" ;
 
 token Id (letter (letter | digit | '_')*) ;

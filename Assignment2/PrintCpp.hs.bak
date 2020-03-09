@@ -136,11 +136,12 @@ instance Print AbsCpp.Stm where
 instance Print AbsCpp.Exp where
   prt i e = case e of
     AbsCpp.ELit str -> prPrec i 16 (concatD [prt 0 str])
+    AbsCpp.EType type_ -> prPrec i 15 (concatD [prt 0 type_])
     AbsCpp.EInt n -> prPrec i 15 (concatD [prt 0 n])
     AbsCpp.EDouble d -> prPrec i 15 (concatD [prt 0 d])
     AbsCpp.ETrue -> prPrec i 15 (concatD [doc (showString "true")])
     AbsCpp.EFalse -> prPrec i 15 (concatD [doc (showString "false")])
-    AbsCpp.EQCons exp1 exp2 -> prPrec i 15 (concatD [prt 15 exp1, doc (showString "::"), prt 16 exp2])
+    AbsCpp.EQCons exp exps -> prPrec i 15 (concatD [prt 15 exp, doc (showString "::"), prt 0 exps])
     AbsCpp.EIdx exp n -> prPrec i 15 (concatD [prt 15 exp, doc (showString "["), prt 0 n, doc (showString "]")])
     AbsCpp.EId id -> prPrec i 15 (concatD [prt 0 id])
     AbsCpp.EApp id exps -> prPrec i 15 (concatD [prt 0 id, doc (showString "("), prt 0 exps, doc (showString ")")])
@@ -186,4 +187,5 @@ instance Print AbsCpp.Type where
     AbsCpp.Tdouble -> prPrec i 0 (concatD [doc (showString "double")])
     AbsCpp.Tint -> prPrec i 0 (concatD [doc (showString "int")])
     AbsCpp.Tvoid -> prPrec i 0 (concatD [doc (showString "void")])
+    AbsCpp.Tstring -> prPrec i 0 (concatD [doc (showString "string")])
 

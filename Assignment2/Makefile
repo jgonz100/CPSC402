@@ -10,8 +10,8 @@ all : TestCpp
 
 # Rules for building the parser.
 
-ErrM.hs LexCpp.x PrintCpp.hs ParCpp.y TestCpp.hs : Cpp.cf
-	bnfc --haskell Cpp.cf
+ErrM.hs LexCpp.x PrintCpp.hs ParCpp.y TestCpp.hs : cpp.cf
+	bnfc --haskell cpp.cf
 
 %.hs : %.y
 	happy --ghc --coerce --array --info $<
@@ -28,7 +28,7 @@ clean :
 	-rm -f *.hi *.o *.log *.aux *.dvi
 
 distclean : clean
-	-rm -f AbsCpp.hs AbsCpp.hs.bak ComposOp.hs ComposOp.hs.bak DocCpp.txt DocCpp.txt.bak ErrM.hs ErrM.hs.bak LayoutCpp.hs LayoutCpp.hs.bak LexCpp.x LexCpp.x.bak ParCpp.y ParCpp.y.bak PrintCpp.hs PrintCpp.hs.bak SharedString.hs SharedString.hs.bak SkelCpp.hs SkelCpp.hs.bak TestCpp.hs TestCpp.hs.bak XMLCpp.hs XMLCpp.hs.bak ASTCpp.agda ASTCpp.agda.bak ParserCpp.agda ParserCpp.agda.bak IOLib.agda IOLib.agda.bak Main.agda Main.agda.bak Cpp.dtd Cpp.dtd.bak TestCpp LexCpp.hs ParCpp.hs ParCpp.info ParDataCpp.hs Makefile
+	-rm -f AbsCpp.hs AbsCpp.hs.bak ComposOp.hs ComposOp.hs.bak DocCpp.txt DocCpp.txt.bak ErrM.hs ErrM.hs.bak LayoutCpp.hs LayoutCpp.hs.bak LexCpp.x LexCpp.x.bak ParCpp.y ParCpp.y.bak PrintCpp.hs PrintCpp.hs.bak SharedString.hs SharedString.hs.bak SkelCpp.hs SkelCpp.hs.bak TestCpp.hs TestCpp.hs.bak XMLCpp.hs XMLCpp.hs.bak ASTCpp.agda ASTCpp.agda.bak ParserCpp.agda ParserCpp.agda.bak IOLib.agda IOLib.agda.bak Main.agda Main.agda.bak cpp.dtd cpp.dtd.bak TestCpp LexCpp.hs ParCpp.hs ParCpp.info ParDataCpp.hs Makefile
 
 
 # EOF
