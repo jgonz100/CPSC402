@@ -11,4 +11,4 @@ Jadyn Gonzalez and Michelle Kutsanov
 > jgonzalez@chapman.edu kutsanov@chapman.edu
 - To test the parser clone the repository and **cd** into the **Assignment 2** directory
 - Run **bnfc -m -haskell Cpp.cf** then **make**
-- Run **./TestCpp tests/test1.cpp** and **./TestCpp tests/test2.cpp** to test the grammar
+- Run **./TestCpp tests/testk.cpp** where k is (1-5) to test the grammar
