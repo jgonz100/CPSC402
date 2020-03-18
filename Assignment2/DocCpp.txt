@@ -36,17 +36,20 @@ Id literals are recognized by the regular expression
 The set of reserved words is the set of terminals appearing in the grammar. Those reserved words that consist of non-letter characters are called symbols, and they are treated in a different way from those that are similar to identifiers. The lexer follows rules familiar from languages like Haskell, C, and Java, including longest match and spacing conventions.
 
 The reserved words used in cpp are the following:
-  | ``bool`` | ``double`` | ``else`` | ``false``
-  | ``if`` | ``int`` | ``return`` | ``string``
-  | ``throw`` | ``true`` | ``void`` | ``while``
+  | ``bool`` | ``const`` | ``double`` | ``else``
+  | ``false`` | ``if`` | ``int`` | ``return``
+  | ``string`` | ``throw`` | ``true`` | ``typedef``
+  | ``using`` | ``void`` | ``while`` |
 
 The symbols used in cpp are the following:
   | ( | ) | { | }
-  | , | ; | = | ::
-  | ++ | -- | * | /
+  | ; | < | > | &
+  | , | = | :: | [
+  | ] | ++ | -- | .
+  | ! | * | / | %
   | + | - | << | >>
-  | < | > | <= | >=
-  | == | != | && | ||
+  | <= | >= | == | !=
+  | && | || | ? | :
 
 ===Comments===
 Single-line comments begin with #, //.Multiple-line comments are  enclosed with /* and */.
@@ -58,20 +61,36 @@ and **eps** (empty rule) belong to the BNF notation.
 All other symbols are terminals.
 
   | //Program// | -> | //[Def]//
-  | //Def// | -> | //Type// //Id// ``(`` //[Arg]// ``)`` ``{`` //[Stm]// ``}``
+  | //Def// | -> | //Type// //TokenId// ``(`` //[Arg]// ``)`` ``{`` //[Stm]// ``}``
+  |  |  **|**  | //TokenId// //TokenId// ``(`` //[Arg]// ``)`` ``{`` //[Stm]// ``}``
+  |  |  **|**  | ``using`` //Exp15// ``;``
+  |  |  **|**  | //Type// //TokenId// ``(`` //Type// ``)`` ``;``
   | //[Def]// | -> | **eps**
   |  |  **|**  | //Def// //[Def]//
-  | //Arg// | -> | //Type// //Id//
+  | //Arg// | -> | //Type// //TokenId//
+  |  |  **|**  | //Type// ``<`` //[Type]// ``>`` ``&``
+  |  |  **|**  | ``const`` //TokenId// ``&``
+  |  |  **|**  | //TokenId// ``&`` //TokenId//
+  |  |  **|**  | ``const`` //Type// ``&`` //TokenId//
+  |  |  **|**  | ``const`` //Type// //TokenId//
+  |  |  **|**  | ``const`` //TokenId// ``&`` //TokenId//
+  |  |  **|**  | ``const`` //TypeList// //TokenId//
+  |  |  **|**  | ``const`` //TypeList// ``&`` //TokenId//
   | //[Arg]// | -> | **eps**
   |  |  **|**  | //Arg//
   |  |  **|**  | //Arg// ``,`` //[Arg]//
-  | //Stm// | -> | //Exp// ``;``
-  |  |  **|**  | //Type// //[Id]// ``;``
-  |  |  **|**  | //Type// //Id// ``=`` //Exp// ``;``
+  | //Stm// | -> | //TypeDef// ``;``
+  |  |  **|**  | //Exp// ``;``
+  |  |  **|**  | //Type// //[TokenId]// ``;``
+  |  |  **|**  | //Exp15// //[TokenId]// ``;``
+  |  |  **|**  | ``const`` //Type// //[TokenId]// ``;``
+  |  |  **|**  | //Type// //[TokenId]// ``=`` //Exp// ``;``
+  |  |  **|**  | //Exp15// //[TokenId]// ``=`` //Exp// ``;``
   |  |  **|**  | ``return`` //Exp// ``;``
   |  |  **|**  | ``return`` ``;``
   |  |  **|**  | ``while`` ``(`` //Exp// ``)`` //Stm//
   |  |  **|**  | ``{`` //[Stm]// ``}``
+  |  |  **|**  | ``if`` ``(`` //Exp// ``)`` //Stm//
   |  |  **|**  | ``if`` ``(`` //Exp// ``)`` //Stm// ``else`` //Stm//
   | //[Stm]// | -> | **eps**
   |  |  **|**  | //Stm// //[Stm]//
@@ -79,27 +98,30 @@ All other symbols are terminals.
   |  |  **|**  | ``false``
   |  |  **|**  | //Integer//
   |  |  **|**  | //Double//
-  |  |  **|**  | //String//
-  |  |  **|**  | //Id//
+  |  |  **|**  | //[String]//
+  |  |  **|**  | //TokenId//
   |  |  **|**  | //Type//
-  |  |  **|**  | //Id// ``(`` //[Exp]// ``)``
-  |  |  **|**  | //Exp15// ``::`` //[Exp]// //Id//
-  |  |  **|**  | //Exp15// ``::`` //[Exp]//
+  |  |  **|**  | //TokenId// ``(`` //[Exp]// ``)``
+  |  |  **|**  | //Exp15// ``::`` //Exp15//
+  |  |  **|**  | //Exp15// ``[`` //[Exp]// ``]``
   |  |  **|**  | ``(`` //Exp// ``)``
   | //Exp14// | -> | //Exp15// ``++``
   |  |  **|**  | //Exp15// ``--``
+  |  |  **|**  | //Exp14// ``.`` //Exp15//
   |  |  **|**  | //Exp15//
-  | //Exp13// | -> | ``++`` //Exp14//
+  | //Exp13// | -> | ``!`` //Exp14//
+  |  |  **|**  | ``++`` //Exp14//
   |  |  **|**  | ``--`` //Exp14//
   |  |  **|**  | //Exp14//
   | //Exp12// | -> | //Exp12// ``*`` //Exp13//
   |  |  **|**  | //Exp12// ``/`` //Exp13//
+  |  |  **|**  | //Exp12// ``%`` //Exp13//
   |  |  **|**  | //Exp13//
   | //Exp11// | -> | //Exp11// ``+`` //Exp12//
   |  |  **|**  | //Exp11// ``-`` //Exp12//
   |  |  **|**  | //Exp12//
   | //Exp10// | -> | //Exp10// ``<<`` //Exp11//
-  |  |  **|**  | //Exp10// ``>>`` //Exp11//
+  |  |  **|**  | //Exp15// ``>>`` //Exp10//
   |  |  **|**  | //Exp11//
   | //Exp9// | -> | //Exp9// ``<`` //Exp10//
   |  |  **|**  | //Exp9// ``>`` //Exp10//
@@ -114,8 +136,9 @@ All other symbols are terminals.
   | //Exp3// | -> | //Exp3// ``||`` //Exp4//
   |  |  **|**  | //Exp4//
   | //Exp2// | -> | //Exp3// ``=`` //Exp2//
+  |  |  **|**  | ``throw`` //Exp//
   |  |  **|**  | //Exp3//
-  | //Exp1// | -> | ``throw`` //Exp1//
+  | //Exp1// | -> | //Exp// ``?`` //Exp3// ``:`` //Exp3//
   |  |  **|**  | //Exp2//
   | //Exp// | -> | //Exp1//
   | //Exp5// | -> | //Exp6//
@@ -124,12 +147,21 @@ All other symbols are terminals.
   | //[Exp]// | -> | **eps**
   |  |  **|**  | //Exp//
   |  |  **|**  | //Exp// ``,`` //[Exp]//
+  | //[Type]// | -> | **eps**
+  |  |  **|**  | //Type//
+  |  |  **|**  | //Type// ``,`` //[Type]//
+  | //[TokenId]// | -> | //TokenId//
+  |  |  **|**  | //TokenId// ``,`` //[TokenId]//
+  | //[String]// | -> | //String//
+  |  |  **|**  | //String// //[String]//
   | //Type// | -> | ``bool``
   |  |  **|**  | ``int``
   |  |  **|**  | ``double``
   |  |  **|**  | ``void``
   |  |  **|**  | ``string``
-  | //[Id]// | -> | //Id//
-  |  |  **|**  | //Id// ``,`` //[Id]//
+  | //TypeDef// | -> | ``typedef`` //[Exp]// //TokenId//
+  | //TypeList// | -> | //TokenId// ``<`` //[Type]// ``>``
+  | //TokenId// | -> | //TypeList//
+  |  |  **|**  | //Id//
 
 

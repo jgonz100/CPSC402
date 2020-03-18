@@ -27,7 +27,7 @@ int main()
 
 	// ask for and read the homework grades
 	cout << "Enter all your homework grades, "
-	        "followed by end-of-file: ";
+					"followed by end-of-file: ";
 
 	vector<double> homework;
 	double x;

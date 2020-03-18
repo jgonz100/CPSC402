@@ -17,19 +17,35 @@ transProgram x = case x of
   PDefs defs -> failure x
 transDef :: Def -> Result
 transDef x = case x of
-  DFun type_ id args stms -> failure x
+  DFun type_ tokenid args stms -> failure x
+  DUserFun tokenid1 tokenid2 args stms -> failure x
+  DUSing exp -> failure x
+  DType type_1 tokenid type_2 -> failure x
 transArg :: Arg -> Result
 transArg x = case x of
-  ADecl type_ id -> failure x
+  ADecl type_ tokenid -> failure x
+  ASingT type_ types -> failure x
+  ASingR tokenid -> failure x
+  AStreamR tokenid1 tokenid2 -> failure x
+  AConstT type_ tokenid -> failure x
+  AConst type_ tokenid -> failure x
+  AConstR tokenid1 tokenid2 -> failure x
+  AConstL typelist tokenid -> failure x
+  AConstLR typelist tokenid -> failure x
 transStm :: Stm -> Result
 transStm x = case x of
+  STDef typedef -> failure x
   SExp exp -> failure x
-  SDecls type_ ids -> failure x
-  SInit type_ id exp -> failure x
+  SDecls type_ tokenids -> failure x
+  SDecls2 exp tokenids -> failure x
+  SConst type_ tokenids -> failure x
+  SInit type_ tokenids exp -> failure x
+  SInit2 exp1 tokenids exp2 -> failure x
   SReturn exp -> failure x
   SReturnVoid -> failure x
   SWhile exp stm -> failure x
   SBlock stms -> failure x
+  SIf exp stm -> failure x
   SIfElse exp stm1 stm2 -> failure x
 transExp :: Exp -> Result
 transExp x = case x of
@@ -37,22 +53,25 @@ transExp x = case x of
   EFalse -> failure x
   EInt integer -> failure x
   EDouble double -> failure x
-  EString string -> failure x
-  EId id -> failure x
+  EString strings -> failure x
+  EId tokenid -> failure x
   EType type_ -> failure x
-  EApp id exps -> failure x
-  ETemp exp exps id -> failure x
-  EQCons exp exps -> failure x
+  EApp tokenid exps -> failure x
+  EQConst exp1 exp2 -> failure x
+  EInd exp exps -> failure x
   EPIncr exp -> failure x
   EPDecr exp -> failure x
+  EDot exp1 exp2 -> failure x
+  ENega exp -> failure x
   EIncr exp -> failure x
   EDecr exp -> failure x
   ETimes exp1 exp2 -> failure x
   EDiv exp1 exp2 -> failure x
+  EMod exp1 exp2 -> failure x
   EPlus exp1 exp2 -> failure x
   EMinus exp1 exp2 -> failure x
-  ESftl exp1 exp2 -> failure x
-  ESftr exp1 exp2 -> failure x
+  ELShift exp1 exp2 -> failure x
+  ERShift exp1 exp2 -> failure x
   ELt exp1 exp2 -> failure x
   EGt exp1 exp2 -> failure x
   ELtEq exp1 exp2 -> failure x
@@ -62,7 +81,8 @@ transExp x = case x of
   EAnd exp1 exp2 -> failure x
   EOr exp1 exp2 -> failure x
   EAss exp1 exp2 -> failure x
-  EErr exp -> failure x
+  ECond exp1 exp2 exp3 -> failure x
+  EExcept exp -> failure x
   ETyped exp type_ -> failure x
 transType :: Type -> Result
 transType x = case x of
@@ -71,4 +91,14 @@ transType x = case x of
   Type_double -> failure x
   Type_void -> failure x
   Type_string -> failure x
+transTypeDef :: TypeDef -> Result
+transTypeDef x = case x of
+  TDef exps tokenid -> failure x
+transTypeList :: TypeList -> Result
+transTypeList x = case x of
+  TList tokenid types -> failure x
+transTokenId :: TokenId -> Result
+transTokenId x = case x of
+  TId typelist -> failure x
+  TId2 id -> failure x
 
