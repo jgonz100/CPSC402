@@ -10,38 +10,49 @@ data Program = PDefs [Def]
   deriving (Eq, Ord, Show, Read)
 
 data Def
-    = DFun Type TokenId [Arg] [Stm]
-    | DUserFun TokenId TokenId [Arg] [Stm]
-    | DUSing Exp
-    | DType Type TokenId Type
+    = DFunc Type Id [Arg] [Stm]
+    | DInlineS Type Id [Arg] [Stm]
+    | DInlineF Type Id [Arg]
+    | DDecl Type [Id]
+    | DUsing QConst
+    | DStruct Type Id [Type]
+    | DMain Type [Arg] [Stm]
   deriving (Eq, Ord, Show, Read)
 
-data Arg
-    = ADecl Type TokenId
-    | ASingT Type [Type]
-    | ASingR TokenId
-    | AStreamR TokenId TokenId
-    | AConstT Type TokenId
-    | AConst Type TokenId
-    | AConstR TokenId TokenId
-    | AConstL TypeList TokenId
-    | AConstLR TypeList TokenId
+data Arg = ADecl Type Id
   deriving (Eq, Ord, Show, Read)
 
 data Stm
-    = STDef TypeDef
-    | SExp Exp
-    | SDecls Type [TokenId]
-    | SDecls2 Exp [TokenId]
-    | SConst Type [TokenId]
-    | SInit Type [TokenId] Exp
-    | SInit2 Exp [TokenId] Exp
+    = SExp Exp
+    | SDecls Type [Id]
+    | SInit Type Id Exp
     | SReturn Exp
     | SReturnVoid
     | SWhile Exp Stm
+    | SFor Stm Exp Exp Stm
+    | SDoWhile Stm Exp
     | SBlock [Stm]
     | SIf Exp Stm
     | SIfElse Exp Stm Stm
+    | SMethod Type Id [Arg] Stm
+  deriving (Eq, Ord, Show, Read)
+
+data Type
+    = TInt
+    | TBool
+    | TVoid
+    | TChar
+    | TDouble
+    | TQConst QConst
+    | TCons Type
+    | TDef Type
+    | TRef Type
+  deriving (Eq, Ord, Show, Read)
+
+data QConst = QConst [Name]
+  deriving (Eq, Ord, Show, Read)
+
+data Name = NameId Id | NTempl Id [Type]
   deriving (Eq, Ord, Show, Read)
 
 data Exp
@@ -49,25 +60,26 @@ data Exp
     | EFalse
     | EInt Integer
     | EDouble Double
-    | EString [String]
-    | EId TokenId
-    | EType Type
-    | EApp TokenId [Exp]
-    | EQConst Exp Exp
-    | EInd Exp [Exp]
+    | EString String
+    | EChar Char
+    | EQConst QConst
+    | EIdx Exp Exp
+    | EApp Exp [Exp]
+    | EDot Exp Exp
     | EPIncr Exp
     | EPDecr Exp
-    | EDot Exp Exp
-    | ENega Exp
+    | EDeref Exp
+    | EProj Exp Exp
     | EIncr Exp
     | EDecr Exp
+    | ENot Exp
     | ETimes Exp Exp
     | EDiv Exp Exp
     | EMod Exp Exp
     | EPlus Exp Exp
     | EMinus Exp Exp
-    | ELShift Exp Exp
-    | ERShift Exp Exp
+    | EShftL Exp [Exp]
+    | EShftR Exp Exp
     | ELt Exp Exp
     | EGt Exp Exp
     | ELtEq Exp Exp
@@ -77,21 +89,10 @@ data Exp
     | EAnd Exp Exp
     | EOr Exp Exp
     | EAss Exp Exp
-    | ECond Exp Exp Exp
-    | EExcept Exp
+    | EAssA Exp Exp
+    | EAssM Exp Exp
+    | EIf Exp Exp Exp
+    | EThrow Exp
     | ETyped Exp Type
-  deriving (Eq, Ord, Show, Read)
-
-data Type
-    = Type_bool | Type_int | Type_double | Type_void | Type_string
-  deriving (Eq, Ord, Show, Read)
-
-data TypeDef = TDef [Exp] TokenId
-  deriving (Eq, Ord, Show, Read)
-
-data TypeList = TList TokenId [Type]
-  deriving (Eq, Ord, Show, Read)
-
-data TokenId = TId TypeList | TId2 Id
   deriving (Eq, Ord, Show, Read)
 
