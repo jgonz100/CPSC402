@@ -12,3 +12,4 @@ Jadyn Gonzalez and Michelle Kutsanov
 - To test the parser clone the repository and **cd** into the **Assignment 2** directory
 - Run **bnfc -m -haskell cpp.cf** then **make**
 - Run **./TestCpp tests/testk.cpp** where k is (1-5) to test the grammar
+- Run the **test suite**
