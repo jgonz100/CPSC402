@@ -3,14 +3,15 @@ PDefs.   Program ::= [Def] ;
 DFunc.      Def ::= Type Id "(" [Arg] ")" "{" [Stm] "}" ;
 DInlineS.   Def ::= "inline" Type Id "(" [Arg] ")" "{" [Stm] "}" ;
 DInlineF.   Def ::= "inline" Type Id "(" [Arg] ")" ";" ;
-DDecl.	    Def ::= Type [Id] ";" ;
 DUsing.	    Def ::= "using" QConst ";" ;
-DStruct.    Def ::= Type Id "(" [Type] ")" ";" ;
 DMain.      Def ::= Type "main" "(" [Arg] ")" "{" [Stm] "}" ;
+DMethod.    Def ::= Type Id "(" [Arg] ")" ";" ;
+DStm.       Def ::= Stm ;
 
 terminator Def "" ;
 
 ADecl.   Arg    ::= Type Id ;
+AType.   Arg    ::= Type;
 
 separator Arg "," ;
 
@@ -25,8 +26,6 @@ SDoWhile.		 Stm ::= "do" Stm "while" "(" Exp ")" ";" ;
 SBlock.      Stm ::= "{" [Stm] "}" ;
 SIf.         Stm ::= "if" "(" Exp ")" Stm ;
 SIfElse.     Stm ::= "if" "(" Exp ")" Stm "else" Stm ;
-SMethod.     Stm ::= Type Id "(" [Arg] ")" "{" Stm "}" ;
-
 terminator Stm "" ;
 
 TInt.      Type ::= "int" ;
@@ -42,8 +41,8 @@ TRef.      Type ::= Type "&" ;
 separator Type "," ;
 
 QConst.    QConst ::= [Name] ;
-NameId.	   Name   ::= Id ;
-NTempl.    Name   ::= Id "<" [Type] ">" ;
+NameId.	   Name ::= Id ;
+NTempl.    Name ::= Id "<" [Type] ">" ;
 
 separator nonempty Name "::" ;
 
@@ -75,8 +74,8 @@ EMod.    Exp12  ::= Exp12 "%"  Exp13 ;
 EPlus.   Exp11  ::= Exp11 "+"  Exp12 ;
 EMinus.  Exp11  ::= Exp11 "-"  Exp12 ;
 
-EShftL.  Exp10  ::= Exp10 "<<" [Exp11] ;
-EShftR.  Exp10  ::= Exp10 ">>" Exp11 ;
+EShftL.  Exp10 ::= Exp10 "<<" [Exp11] ;
+EShftR.  Exp10 ::= Exp10 ">>" Exp11 ;
 
 ELt.     Exp9   ::= Exp9  "<"  Exp10 ;
 EGt.     Exp9   ::= Exp9  ">"  Exp10 ;
