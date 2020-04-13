@@ -115,6 +115,11 @@ checkStm env (SExp e) ty = do
     return env
 checkStm env (SDecls ty' ids) ty =
     foldM (\e i -> insertVar e i ty') env ids
+checkStm env (SInit ty' id e) ty = do
+    (\x i -> insertVar x i ty') env id
+    inferTypeExp env e
+    checkExp env e ty
+    return env
 checkStm env (SReturn e) ty = do
     checkExp env e ty
     return env
@@ -126,6 +131,7 @@ checkStm _ s _ = fail $ "Missing case in checkStm encountered:\n" ++ printTree s
 
 inferTypeExp :: Env -> Exp -> Err Type
 inferTypeExp env (EInt _) = return Type_int
+inferTypeExp env (EId id) = lookupVar id env
 inferTypeExp env (ETimes e1 e2) =
     inferTypeOverloadedExp env (Alternative [Type_int,Type_double]) e1 [e2]
 inferTypeExp env (EPlus e1 e2) =
