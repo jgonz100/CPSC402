@@ -13,3 +13,10 @@ Jadyn Gonzalez and Michelle Kutsanov
 - Run **bnfc -m -haskell cpp.cf** then **make**
 - Run **./TestCpp tests/testk.cpp** where k is (1-5) to test the grammar
 - Run the **test suite**
+
+## Assignment 3 - Type Checker
+Jadyn Gonzalez
+> jgonzalez@chapman.edu
+- to test clone the repository and **cd** into the the **Assignment 3** then the **TypeChecker** directory
+- run **stack build**
+- run **stack test**
