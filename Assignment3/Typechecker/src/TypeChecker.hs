@@ -115,11 +115,8 @@ checkStm env (SExp e) ty = do
     return env
 checkStm env (SDecls ty' ids) ty =
     foldM (\e i -> insertVar e i ty') env ids
-checkStm env (SInit ty' id e) ty = do
+checkStm env (SInit ty' id e) ty =
     (\x i -> insertVar x i ty') env id
-    inferTypeExp env e
-    checkExp env e ty
-    return env
 checkStm env (SReturn e) ty = do
     checkExp env e ty
     return env
