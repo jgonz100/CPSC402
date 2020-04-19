@@ -120,6 +120,7 @@ checkStm env (SInit ty' id e) ty =
 checkStm env (SReturn e) ty = do
     checkExp env e ty
     return env
+
 {-
 Here need to go the missing cases. Once you have all cases you can delete the next line which is only needed to catch all cases that are not yet implemented.
 -}
@@ -127,12 +128,26 @@ checkStm _ s _ = fail $ "Missing case in checkStm encountered:\n" ++ printTree s
 
 
 inferTypeExp :: Env -> Exp -> Err Type
+inferTypeExp env (ETrue) = return Type_bool
+inferTypeExp env (EFalse) = return Type_bool
 inferTypeExp env (EInt _) = return Type_int
+inferTypeExp env (EDouble _) = return Type_double
+inferTypeExp env (EString _) = return Type_string
 inferTypeExp env (EId id) = lookupVar id env
+inferTypeExp env (EApp id es) = do
+  (argTys, retTy) <- lookupFun env id
+  forM_(zip es argTys)(\p -> checkExp env (fst p)(snd p))
+  return retTy
 inferTypeExp env (ETimes e1 e2) =
     inferTypeOverloadedExp env (Alternative [Type_int,Type_double]) e1 [e2]
 inferTypeExp env (EPlus e1 e2) =
     inferTypeOverloadedExp env (Alternative [Type_int,Type_double]) e1 [e2]
+inferTypeExp env (EMinus e1 e2) =
+    inferTypeOverloadedExp env (Alternative [Type_int,Type_double]) e1 [e2]
+inferTypeExp env (EOr e1 e2) = do
+    ty <- inferTypeExp env e1
+    checkExp env e2 ty
+    return ty
 inferTypeExp env (EAss e1 e2) = do
     ty <- inferTypeExp env e1
     checkExp env e2 ty
