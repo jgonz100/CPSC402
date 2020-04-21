@@ -117,14 +117,24 @@ checkStm env (SDecls ty' ids) ty =
     foldM (\e i -> insertVar e i ty') env ids
 checkStm env (SInit ty' id e) ty =
     (\x i -> insertVar x i ty') env id
+checkStm env (SBlock stms) ty = do
+    checkStms (newBlock env) ty stms
+    return env
+checkStm env (SIfElse exp s1 s2) ty = do
+    checkExp env exp Type_bool
+    checkStm (newBlock env) s1 ty
+    checkStm (newBlock env) s2 ty
+    return env
 checkStm env (SReturn e) ty = do
     checkExp env e ty
     return env
-
 {-
 Here need to go the missing cases. Once you have all cases you can delete the next line which is only needed to catch all cases that are not yet implemented.
 -}
 checkStm _ s _ = fail $ "Missing case in checkStm encountered:\n" ++ printTree s
+
+checkStms :: Env -> Type -> [Stm] -> Err Env
+checkStms env typ = foldM (\env stm -> checkStm env stm typ) env
 
 
 inferTypeExp :: Env -> Exp -> Err Type
@@ -136,18 +146,56 @@ inferTypeExp env (EString _) = return Type_string
 inferTypeExp env (EId id) = lookupVar id env
 inferTypeExp env (EApp id es) = do
   (argTys, retTy) <- lookupFun env id
-  forM_(zip es argTys)(\p -> checkExp env (fst p)(snd p))
+  args <- mapM (inferTypeExp env) es
   return retTy
+inferTypeExp env (EPDecr e) = do
+    ty <- inferTypeExp env e
+    unless (ty == Type_int || ty == Type_double)
+      $ fail $ "Expected type not found" ++
+                printTree ty
+    return ty
+inferTypeExp env (EPIncr e) = do
+    ty <- inferTypeExp env e
+    unless (ty == Type_int || ty == Type_double)
+      $ fail $ "Expected type not found" ++
+                printTree ty
+    return ty
+inferTypeExp env (EDecr e) = do
+    ty <- inferTypeExp env e
+    unless (ty == Type_int || ty == Type_double)
+      $ fail $ "Expected type not found" ++
+                printTree ty
+    return ty
+inferTypeExp env (EIncr e) = do
+    ty <- inferTypeExp env e
+    unless (ty == Type_int || ty == Type_double)
+      $ fail $ "Expected type not found" ++
+                printTree ty
+    return ty
 inferTypeExp env (ETimes e1 e2) =
+    inferTypeOverloadedExp env (Alternative [Type_int,Type_double]) e1 [e2]
+inferTypeExp env (EDiv e1 e2) =
     inferTypeOverloadedExp env (Alternative [Type_int,Type_double]) e1 [e2]
 inferTypeExp env (EPlus e1 e2) =
     inferTypeOverloadedExp env (Alternative [Type_int,Type_double]) e1 [e2]
 inferTypeExp env (EMinus e1 e2) =
     inferTypeOverloadedExp env (Alternative [Type_int,Type_double]) e1 [e2]
-inferTypeExp env (EOr e1 e2) = do
-    ty <- inferTypeExp env e1
-    checkExp env e2 ty
-    return ty
+inferTypeExp env (ELt e1 e2) =
+    inferTypeOverloadedExp env (Alternative [Type_int,Type_double,Type_bool]) e1 [e2] >> return Type_bool
+inferTypeExp env (EGt e1 e2) =
+    inferTypeOverloadedExp env (Alternative [Type_int,Type_double,Type_bool]) e1 [e2] >> return Type_bool
+inferTypeExp env (ELtEq e1 e2) =
+    inferTypeOverloadedExp env (Alternative [Type_int,Type_double,Type_bool]) e1 [e2] >> return Type_bool
+inferTypeExp env (EGtEq e1 e2) =
+    inferTypeOverloadedExp env (Alternative [Type_int,Type_double,Type_bool]) e1 [e2] >> return Type_bool
+inferTypeExp env (EAnd e1 e2) =
+    inferTypeOverloadedExp env (Alternative [Type_bool]) e1 [e2]
+inferTypeExp env (EOr e1 e2) =
+    inferTypeOverloadedExp env (Alternative [Type_bool]) e1 [e2]
+inferTypeExp env (EEq e1 e2) =
+    inferTypeOverloadedExp env (Alternative [Type_int,Type_double,Type_bool]) e1 [e2] >> return Type_bool
+inferTypeExp env (ENEq e1 e2) =
+    inferTypeOverloadedExp env (Alternative [Type_int,Type_double,Type_bool]) e1 [e2] >> return Type_bool
 inferTypeExp env (EAss e1 e2) = do
     ty <- inferTypeExp env e1
     checkExp env e2 ty
