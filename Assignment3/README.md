@@ -4,3 +4,4 @@
 - The program easy_add.cc requires a typechecking rule for EPlus
 - The program ass_easy.cc requires a typechecking rule for SInit and EId
 > For whatever reason git will not allow me to add all the test files to this repo :( so it is best to replace my Typechecker.hs with the original repo's Typechecker.hs file then run **stack build** and **stack test**
+> Upon running my Typechecker.hs with the original repo I get **Good Programs: passed 73 of 76 tests** and **Bad Programs: passed 60 of 74 tests**
