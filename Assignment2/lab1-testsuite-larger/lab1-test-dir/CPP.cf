@@ -42,8 +42,8 @@ TRef.      Type ::= Type "&" ;
 separator Type "," ;
 
 QConst.    QConst ::= [Name] ;
-NameId.	   Name ::= Id ;
-NTempl.    Name ::= Id "<" [Type] ">" ;
+NameId.	   Name   ::= Id ;
+NTempl.    Name   ::= Id "<" [Type] ">" ;
 
 separator nonempty Name "::" ;
 
@@ -75,8 +75,8 @@ EMod.    Exp12  ::= Exp12 "%"  Exp13 ;
 EPlus.   Exp11  ::= Exp11 "+"  Exp12 ;
 EMinus.  Exp11  ::= Exp11 "-"  Exp12 ;
 
-EShftL.  Exp10 ::= Exp10 "<<" [Exp11] ;
-EShftR.  Exp10 ::= Exp10 ">>" Exp11 ;
+EShftL.  Exp10  ::= Exp10 "<<" [Exp11] ;
+EShftR.  Exp10  ::= Exp10 ">>" Exp11 ;
 
 ELt.     Exp9   ::= Exp9  "<"  Exp10 ;
 EGt.     Exp9   ::= Exp9  ">"  Exp10 ;
