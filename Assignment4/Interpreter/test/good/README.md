@@ -14,9 +14,13 @@ Jadyn Gonzalez and Michelle Kutsanov
 - Run **./TestCpp tests/testk.cpp** where k is (1-5) to test the grammar
 - Run the **test suite**
 
-## Assignment 3 - Type Checker
+## [Assignment 3 - Type Checker](https://github.com/jgonz100/CPSC402/tree/master/Assignment3)
 Jadyn Gonzalez
 > jgonzalez@chapman.edu
 - to test clone the repository and **cd** into the the **Assignment 3** then the **TypeChecker** directory
 - run **stack build**
 - run **stack test**
+
+## Assignment 4 - Interpreter
+Jadyn Gonzalez
+> jgonzalez@chapman.edu
