@@ -115,6 +115,9 @@ checkStm env (SExp e) ty = do
     return env
 checkStm env (SDecls ty' ids) ty =
     foldM (\e i -> insertVar e i ty') env ids
+checkStm env (SWhile e s) ty = do
+    checkExp env e Type_bool
+    checkStm env s ty
 checkStm env (SInit ty' id e) ty =
     (\x i -> insertVar x i ty') env id
 checkStm env (SBlock stms) ty = do
