@@ -20,3 +20,7 @@ Jadyn Gonzalez
 - to test clone the repository and **cd** into the the **Assignment 3** then the **TypeChecker** directory
 - run **stack build**
 - run **stack test**
+
+## Assignment 4 - Interpreter
+Jadyn Gonzalez
+> jgonzalez@chapman.edu
