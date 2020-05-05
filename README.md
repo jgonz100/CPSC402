@@ -10,3 +10,6 @@
 
 ### Assignment 4 - Interpreter
 > Jadyn Gonzalez
+
+### Assignment 5 - Compiler
+> Jadyn Gonzalez
